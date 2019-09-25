@@ -14,8 +14,7 @@ While sending basic types and data structures between the two is easy, sending i
 cpp2py contains the tools to convert from a OpenCV C++ image(cv::Mat) to a Python OpenCV image(numpy array)
 
 py2cpp does the opposite
-
-
+<br><br><br><br><br><br>
 ## FILES
 
 imgtst.py is a file that tests sending an image from Python to C++ and back.
@@ -31,9 +30,7 @@ imgtst.py is a file that tests sending an image from Python to C++ and back.
        spatial and type attributes and rebuilds the image as a numpy array.
               
   __-Mat2Ctype.py__: Responsible for corresponding `cv::Mat` types (constants such as `cv::CV_8UC3`, for example)
-       to their ctypes counterparts. Used internally by `CppImgReader`.
-                
-                                
+       to their ctypes counterparts. Used internally by `CppImgReader`.<br><br><br><br>
 ### py2cpp files:
 
   __-PyImgReader.hpp and PyImgReader.cpp:__ C++ implementation of the `PyImgReader` class.
@@ -52,8 +49,9 @@ imgtst.py is a file that tests sending an image from Python to C++ and back.
   __Np2MatType.py__: Responsible for corresponding numpy array data types 
        to their `cv:Mat` types counterparts (constants such as `cv::CV_8UC3`, for example).
        Used internally by `NpArr2CArr.py`.
-    
+<br><br><br><br><br><br>
 ## USAGE
+
 
 ### When designing a C++ function that has to return an image to python:
 
@@ -100,56 +98,52 @@ reader = CppImgReader(lib.someFunction(someargs))
 
 img = reader.getImg()
 ```
-    
-            
-            
+<br><br><br><br>
 ### When designing a C++ function that needs to receive an image from Python:
 
-    Instead of:
-        
-    ```c++
-    returntype someFunction(cv::Mat* img)
-    ```    
-        
-        
-    Do:
+Instead of:
     
-    ```c++   
-    returntype someFunction(PyImgReader* reader)
-    {
-        cv::Mat* img = reader->getImg();
-        ...
-    }
-    ```
-        
-        
-    Sending the image with Python:
+```c++
+returntype someFunction(cv::Mat* img)
+```    
     
-    ```python
-    import ctypes as ct
     
-    lib = ct.CDLL(path_to_C_lib_containing_someFunction)
+Do:
+
+```c++   
+returntype someFunction(PyImgReader* reader)
+{
+    cv::Mat* img = reader->getImg();
     ...
-    img = someimage OR imgpath = path_to_some_image
-    ...
-    writer = CppImgWriter(img=img OR imgpath=imgpath)
-    
-    someresult = lib.someFunction(writer.sendImg())
-    ```    
-        
+}
+```
     
     
+Sending the image with Python:
+
+```python
+import ctypes as ct
+
+lib = ct.CDLL(path_to_C_lib_containing_someFunction)
+...
+img = someimage OR imgpath = path_to_some_image
+...
+writer = CppImgWriter(img=img OR imgpath=imgpath)
+
+someresult = lib.someFunction(writer.sendImg())
+```
+<br><br><br><br><br><br>
 ## DEPENDENCIES:
 <br>Development was done in an enviroment with these characteristics:
     
-   Python modules:
-      Python 3.6.8
-      OpenCV 4.1.0
-      ctypes 1.1.0
-      numpy 1.17.0
-        
-   C++ modules:
-      OpenCV 4.1.1
+ &nbsp;&nbsp;&nbsp;&nbsp;Python modules:
+<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Python 3.6.8
+<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OpenCV 4.1.0
+<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctypes 1.1.0
+<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numpy 1.17.0
+       
+<br> &nbsp;&nbsp;&nbsp;&nbsp;C++ modules:
+<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OpenCV 4.1.1
     
     
     
