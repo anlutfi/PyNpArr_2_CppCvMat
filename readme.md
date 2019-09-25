@@ -15,7 +15,7 @@ py2cpp does the opposite
 
 
 
-imgtst.py is a file that tests sending and receiving an image from Python to C++ and back.
+imgtst.py is a file that tests sending an image from Python to C++ and back.
 
 
 cpp2py files:
