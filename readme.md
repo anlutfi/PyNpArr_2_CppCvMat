@@ -57,49 +57,49 @@ imgtst.py is a file that tests sending an image from Python to C++ and back.
 
 ### When designing a C++ function that has to return an image to python:
 
-    Instead of:
-        
-    ```c++
-    cv::Mat* someFunction(...)
+Instead of:
+    
+```c++
+cv::Mat* someFunction(...)
+{
+    cv::Mat* img = new cv::Mat(...);
+    ...
+    return img
+}
+```
+
+
+Do:
+
+```c++
+extern "C"
+{
+    PyImgWriter* someFunction(...)
     {
         cv::Mat* img = new cv::Mat(...);
         ...
-        return img
+        return new PyImgWriter(img);
     }
-    ```
+}
+/* Note that ctypes only deals with C functions, hence the extern declaration
+   In order to make a member of an object visible to python,
+   make a C wrapper around it
+*/
+```
     
 
-    Do:
+Receiving the image with Python:
 
-    ```
-    extern "C"
-    {
-        PyImgWriter* someFunction(...)
-        {
-            cv::Mat* img = new cv::Mat(...);
-            ...
-            return new PyImgWriter(img);
-        }
-    }
-    /* Note that ctypes only deals with C functions, hence the extern declaration
-       In order to make a member of an object visible to python,
-       make a C wrapper around it
-    */
-    ```
-        
-    
-    Receiving the image with Python:
-    
-    ```python
-    import ctypes as ct
-    
-    lib = ct.CDLL(path_to_C_lib_containing_someFunction)
-    lib.someFunction.restype = ct.c_void_p
-    ...
-    reader = CppImgReader(lib.someFunction(someargs))
-    
-    img = reader.getImg()
-    ```
+```python
+import ctypes as ct
+
+lib = ct.CDLL(path_to_C_lib_containing_someFunction)
+lib.someFunction.restype = ct.c_void_p
+...
+reader = CppImgReader(lib.someFunction(someargs))
+
+img = reader.getImg()
+```
     
             
             
