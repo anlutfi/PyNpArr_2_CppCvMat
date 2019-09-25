@@ -14,6 +14,10 @@ cpp2py contains the tools to convert from a OpenCV C++ image(cv::Mat) to a Pytho
 py2cpp does the opposite
 
 
+
+imgtst.py is a file that tests sending and receiving an image from Python to C++ and back.
+
+
 cpp2py files:
 
     -PyImgWriter.hpp and PyImgWriter.cpp: C++ implementation of the PyImgWriter class.
@@ -23,14 +27,42 @@ cpp2py files:
                 It fetches the PyImgWriter's raw image data and the original image's
                 spatial and type attributes and rebuilds the image as a numpy array.
                 
-    -Mat2Ctype.py: Responsible for corresponding cv::Mat types (such as CV_8UC3, for example)
+    -Mat2Ctype.py: Responsible for corresponding cv::Mat types (constants such as CV_8UC3, for example)
                 to their ctypes counterparts. Used internally by CppImgReader.
                 
-                
-                
-                
+                                
 py2cpp files:
 
+    -PyImgReader.hpp and PyImgReader.cpp: C++ implementation of the PyImgReader class.
+                It receives a byte array containing the raw image data, together with
+                its spatial and type attributes, so it can construct a cv::Mat from it.
+                
+    -CppImgWriter.py: Python Implementation of the CppImgWriter. It serializes a numpy array
+                that contains an image and sends it to a PyImgReader.
+                
+    NpArr2CArr.py: serializes a numpy array into a ctypes array of its corresponding type.
+                Used internally by CppImgWriter.
+                
+    Np2Ctype.py: Responsible for corresponding numpy array data types to their ctypes counterparts.
+                 Used internally by NpArr2CArr.py.
+                
+    Np2MatType.py: Responsible for corresponding numpy array data types 
+                to their cv:Mat types counterparts (constants such as CV_8UC3, for example).
+                Used internally by NpArr2CArr.py.
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
