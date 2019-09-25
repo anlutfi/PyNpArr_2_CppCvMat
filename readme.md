@@ -52,7 +52,17 @@ py2cpp files:
     
     
     
+DEPENDENCIES:
+    Development was done in an enviroment with these characteristics:
     
+    Python modules:
+        Python 3.6.8
+        OpenCV 4.1.0
+        ctypes 1.1.0
+        numpy 1.17.0
+        
+    C++ modules:
+        OpenCV 4.1.1
     
     
     
