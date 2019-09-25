@@ -77,6 +77,14 @@ class CppImgWriter:
         self.cobj = newwriter(arr, shape[0], shape[1], cvtype)
 
     
+    def sendImg(self):
+        """sendImg(self)
+           
+           To be used
+        """
+        return self.cobj
+    
+    
     def getImg(self):
         """getImg(self)
            

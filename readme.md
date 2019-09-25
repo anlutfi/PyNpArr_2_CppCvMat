@@ -14,6 +14,7 @@ cpp2py contains the tools to convert from a OpenCV C++ image(cv::Mat) to a Pytho
 py2cpp does the opposite
 
 
+FILES
 
 imgtst.py is a file that tests sending an image from Python to C++ and back.
 
@@ -50,6 +51,77 @@ py2cpp files:
                 to their cv:Mat types counterparts (constants such as CV_8UC3, for example).
                 Used internally by NpArr2CArr.py.
     
+USAGE
+
+When designing a C++ function that has to return an image to python:
+
+        Instead of:
+            
+            cv::Mat* someFunction(...)
+            {
+                cv::Mat* img = new cv::Mat(...);
+                ...
+                return img
+            }
+            
+
+        Do:
+
+            extern "C"
+            {
+                PyImgWriter* someFunction(...)
+                {
+                    cv::Mat* img = new cv::Mat(...);
+                    ...
+                    return new PyImgWriter(img);
+                }
+            }
+            /* Note that ctypes only deals with C functions, hence the extern declaration
+               In order to make a member of an object visible to python,
+               make a C wrapper around it
+            */
+            
+        
+        Receiving the image with Python:
+        
+            import ctypes as ct
+            
+            lib = ct.CDLL(path_to_C_lib_containing_someFunction)
+            lib.someFunction.restype = ct.c_void_p
+            ...
+            reader = CppImgReader(lib.someFunction(someargs))
+            
+            img = reader.getImg()
+            
+            
+            
+When designing a C++ function that needs to receive an image from Python:
+
+        Instead of:
+            
+            returntype someFunction(cv::Mat* img)
+            
+            
+        Do:
+            returntype someFunction(PyImgReader* reader)
+            {
+                cv::Mat* img = reader->getImg();
+                ...
+            }
+            
+            
+        Sending the image with Python:
+        
+            import ctypes as ct
+            
+            lib = ct.CDLL(path_to_C_lib_containing_someFunction)
+            ...
+            img = someimage OR imgpath = path_to_some_image
+            ...
+            writer = CppImgWriter(img=img OR imgpath=imgpath)
+            
+            someresult = lib.someFunction(writer.sendImg())
+            
     
     
 DEPENDENCIES:
