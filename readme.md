@@ -21,6 +21,25 @@ cpp2py files:
                 
     -CppImgReader.py: Python implementation of the CppImgReader class.
                 It fetches the PyImgWriter's raw image data and the original image's
-                spatial attributes and rebuilds the image as a numpy array
+                spatial and type attributes and rebuilds the image as a numpy array.
                 
-    -
+    -Mat2Ctype.py: Responsible for corresponding cv::Mat types (such as CV_8UC3, for example)
+                to their ctypes counterparts. Used internally by CppImgReader.
+                
+                
+                
+                
+py2cpp files:
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
