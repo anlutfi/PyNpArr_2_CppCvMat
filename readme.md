@@ -62,7 +62,7 @@ cv::Mat* someFunction(...)
 {
     cv::Mat* img = new cv::Mat(...);
     ...
-    return img
+    return img;
 }
 ```
 
@@ -111,11 +111,18 @@ returntype someFunction(cv::Mat* img)
 Do:
 
 ```c++   
-returntype someFunction(PyImgReader* reader)
+extern "C"
 {
-    cv::Mat* img = reader->getImg();
-    ...
+    returntype someFunction(PyImgReader* reader)
+    {
+        cv::Mat* img = reader->getImg();
+        ...
+    }
 }
+/* Note that ctypes only deals with C functions, hence the extern declaration.
+   In order to make a member of an object visible to python,
+   make a C wrapper around it
+*/
 ```
     
     
