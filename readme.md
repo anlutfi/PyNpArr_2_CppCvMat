@@ -1,3 +1,5 @@
+# PyNpArr_2_CppCvMat
+
 PyNpArr_2_CppCvMat is a simple interface to send OpenCV images from Python to C++ and vice-versa
 
 OpenCV code in Python, although practical to write, can run quite slowly. Pixel-wise operations, if not done inside OpenCV's calls, can make real-time applications impossible.
@@ -14,12 +16,12 @@ cpp2py contains the tools to convert from a OpenCV C++ image(cv::Mat) to a Pytho
 py2cpp does the opposite
 
 
-FILES
+## FILES
 
 imgtst.py is a file that tests sending an image from Python to C++ and back.
 
 
-cpp2py files:
+### cpp2py files:
 
   -PyImgWriter.hpp and PyImgWriter.cpp: C++ implementation of the PyImgWriter class.
        It serializes a cv::Mat's raw data, so Python can read it as an array of bytes.
@@ -32,7 +34,7 @@ cpp2py files:
        to their ctypes counterparts. Used internally by CppImgReader.
                 
                                 
-py2cpp files:
+### py2cpp files:
 
   -PyImgReader.hpp and PyImgReader.cpp: C++ implementation of the PyImgReader class.
        It receives a byte array containing the raw image data, together with
@@ -51,9 +53,9 @@ py2cpp files:
        to their cv:Mat types counterparts (constants such as CV_8UC3, for example).
        Used internally by NpArr2CArr.py.
     
-USAGE
+## USAGE
 
-When designing a C++ function that has to return an image to python:
+### When designing a C++ function that has to return an image to python:
 
     Instead of:
         
@@ -95,7 +97,7 @@ When designing a C++ function that has to return an image to python:
         
             
             
-When designing a C++ function that needs to receive an image from Python:
+### When designing a C++ function that needs to receive an image from Python:
 
     Instead of:
         
@@ -124,17 +126,17 @@ When designing a C++ function that needs to receive an image from Python:
         
     
     
-DEPENDENCIES:
-    Development was done in an enviroment with these characteristics:
+## DEPENDENCIES:
+<br>Development was done in an enviroment with these characteristics:
     
-    Python modules:
-       Python 3.6.8
-       OpenCV 4.1.0
-       ctypes 1.1.0
-       numpy 1.17.0
+   Python modules:
+      Python 3.6.8
+      OpenCV 4.1.0
+      ctypes 1.1.0
+      numpy 1.17.0
         
-    C++ modules:
-       OpenCV 4.1.1
+   C++ modules:
+      OpenCV 4.1.1
     
     
     
