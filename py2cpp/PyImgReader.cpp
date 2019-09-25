@@ -1,3 +1,7 @@
+/**
+build:  g++ -shared -fPIC -o libPyImageReader.so PyImgReader.cpp -lopencv_core -lopencv_imgcodecs -std=c++11
+*/
+
 #include "PyImgReader.hpp"
 
 

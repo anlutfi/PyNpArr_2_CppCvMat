@@ -1,3 +1,6 @@
+/**
+build:  g++ -shared -fPIC -o libPyImageWriter.so PyImgWriter.cpp -lopencv_core -lopencv_imgcodecs -std=c++11
+*/
 #include "PyImgWriter.hpp"
 
 PyImgWriter::PyImgWriter(cv::Mat* img)
