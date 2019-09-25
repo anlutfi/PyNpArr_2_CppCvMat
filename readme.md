@@ -1,6 +1,6 @@
 # PyNpArr_2_CppCvMat
 
-PyNpArr_2_CppCvMat is a simple interface to send OpenCV images from Python to C++ and vice-versa
+__PyNpArr_2_CppCvMat__ is a simple interface to send OpenCV images from Python to C++ and vice-versa
 
 OpenCV code in Python, although practical to write, can run quite slowly. Pixel-wise operations, if not done inside OpenCV's calls, can make real-time applications impossible.
 
@@ -23,35 +23,35 @@ imgtst.py is a file that tests sending an image from Python to C++ and back.
 
 ### cpp2py files:
 
-  -PyImgWriter.hpp and PyImgWriter.cpp: C++ implementation of the PyImgWriter class.
-       It serializes a cv::Mat's raw data, so Python can read it as an array of bytes.
+  __-PyImgWriter.hpp and PyImgWriter.cpp:__ C++ implementation of the `PyImgWriter` class.
+       It serializes a `cv::Mat`'s raw data, so Python can read it as an array of bytes.
                 
-  -CppImgReader.py: Python implementation of the CppImgReader class.
-       It fetches the PyImgWriter's raw image data and the original image's
+  __-CppImgReader.py:__ Python implementation of the `CppImgReader` class.
+       It fetches the `PyImgWriter`'s raw image data and the original image's
        spatial and type attributes and rebuilds the image as a numpy array.
               
-  -Mat2Ctype.py: Responsible for corresponding cv::Mat types (constants such as CV_8UC3, for example)
-       to their ctypes counterparts. Used internally by CppImgReader.
+  __-Mat2Ctype.py__: Responsible for corresponding `cv::Mat` types (constants such as `cv::CV_8UC3`, for example)
+       to their ctypes counterparts. Used internally by `CppImgReader`.
                 
                                 
 ### py2cpp files:
 
-  -PyImgReader.hpp and PyImgReader.cpp: C++ implementation of the PyImgReader class.
+  __-PyImgReader.hpp and PyImgReader.cpp:__ C++ implementation of the `PyImgReader` class.
        It receives a byte array containing the raw image data, together with
-       its spatial and type attributes, so it can construct a cv::Mat from it.
+       its spatial and type attributes, so it can construct a `cv::Mat` from it.
                 
-  -CppImgWriter.py: Python Implementation of the CppImgWriter. It serializes a numpy array
-       that contains an image and sends it to a PyImgReader.
+  __-CppImgWriter.py__: Python Implementation of the `CppImgWriter`. It serializes a numpy array
+       that contains an image and sends it to a `PyImgReader`.
                 
-  NpArr2CArr.py: serializes a numpy array into a ctypes array of its corresponding type.
-       Used internally by CppImgWriter.
+  __NpArr2CArr.py__: serializes a numpy array into a ctypes array of its corresponding type.
+       Used internally by `CppImgWriter`.
                 
-  Np2Ctype.py: Responsible for corresponding numpy array data types to their ctypes counterparts.
-       Used internally by NpArr2CArr.py.
+  __Np2Ctype.py__: Responsible for corresponding numpy array data types to their ctypes counterparts.
+       Used internally by `NpArr2CArr.py`.
                 
-  Np2MatType.py: Responsible for corresponding numpy array data types 
-       to their cv:Mat types counterparts (constants such as CV_8UC3, for example).
-       Used internally by NpArr2CArr.py.
+  __Np2MatType.py__: Responsible for corresponding numpy array data types 
+       to their `cv:Mat` types counterparts (constants such as `cv::CV_8UC3`, for example).
+       Used internally by `NpArr2CArr.py`.
     
 ## USAGE
 
@@ -59,70 +59,83 @@ imgtst.py is a file that tests sending an image from Python to C++ and back.
 
     Instead of:
         
-        cv::Mat* someFunction(...)
-        {
-            cv::Mat* img = new cv::Mat(...);
-            ...
-            return img
-        }
-        
+    ```c++
+    cv::Mat* someFunction(...)
+    {
+        cv::Mat* img = new cv::Mat(...);
+        ...
+        return img
+    }
+    ```
+    
 
     Do:
 
-        extern "C"
+    ```
+    extern "C"
+    {
+        PyImgWriter* someFunction(...)
         {
-            PyImgWriter* someFunction(...)
-            {
-                cv::Mat* img = new cv::Mat(...);
-                ...
-                return new PyImgWriter(img);
-            }
+            cv::Mat* img = new cv::Mat(...);
+            ...
+            return new PyImgWriter(img);
         }
-        /* Note that ctypes only deals with C functions, hence the extern declaration
-           In order to make a member of an object visible to python,
-           make a C wrapper around it
-        */
+    }
+    /* Note that ctypes only deals with C functions, hence the extern declaration
+       In order to make a member of an object visible to python,
+       make a C wrapper around it
+    */
+    ```
         
     
     Receiving the image with Python:
     
-        import ctypes as ct
-        
-        lib = ct.CDLL(path_to_C_lib_containing_someFunction)
-        lib.someFunction.restype = ct.c_void_p
-        ...
-        reader = CppImgReader(lib.someFunction(someargs))
-        
-        img = reader.getImg()
-        
+    ```python
+    import ctypes as ct
+    
+    lib = ct.CDLL(path_to_C_lib_containing_someFunction)
+    lib.someFunction.restype = ct.c_void_p
+    ...
+    reader = CppImgReader(lib.someFunction(someargs))
+    
+    img = reader.getImg()
+    ```
+    
             
             
 ### When designing a C++ function that needs to receive an image from Python:
 
     Instead of:
         
-        returntype someFunction(cv::Mat* img)
+    ```c++
+    returntype someFunction(cv::Mat* img)
+    ```    
         
         
     Do:
-        returntype someFunction(PyImgReader* reader)
-        {
-            cv::Mat* img = reader->getImg();
-            ...
-        }
+    
+    ```c++   
+    returntype someFunction(PyImgReader* reader)
+    {
+        cv::Mat* img = reader->getImg();
+        ...
+    }
+    ```
         
         
     Sending the image with Python:
     
-        import ctypes as ct
-        
-        lib = ct.CDLL(path_to_C_lib_containing_someFunction)
-        ...
-        img = someimage OR imgpath = path_to_some_image
-        ...
-        writer = CppImgWriter(img=img OR imgpath=imgpath)
-        
-        someresult = lib.someFunction(writer.sendImg())
+    ```python
+    import ctypes as ct
+    
+    lib = ct.CDLL(path_to_C_lib_containing_someFunction)
+    ...
+    img = someimage OR imgpath = path_to_some_image
+    ...
+    writer = CppImgWriter(img=img OR imgpath=imgpath)
+    
+    someresult = lib.someFunction(writer.sendImg())
+    ```    
         
     
     
