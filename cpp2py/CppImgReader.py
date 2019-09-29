@@ -23,13 +23,13 @@ class CppImgReader:
     
     @staticmethod
     def loadLib(libname = 'libPyImageWriter.so'): 
-        """[STATIC] loadLib(lib = None, libname = 'libPyImageWriter.so')
+        """[STATIC] loadLib(libname = 'libPyImageWriter.so')
            
            Loads a dynamic library containing
            PyImgWriter's implementation and binds it
            to CppImgReader.lib
         """
-        CppImgReader.lib = lib if lib is not None else ct.CDLL(libname)
+        CppImgReader.lib = ct.CDLL(libname)
 
 
     def __init__(self, cobj, libname = 'libPyImageWriter.so'):

@@ -1,8 +1,13 @@
 import ctypes as ct
 import cv2
 
-from CppImgReader import CppImgReader
-from CppImgWriter import CppImgWriter
+import sys
+sys.path.append('/home/antonio/Dropbox/projects/PyNpArr_2_CppCvMat/cpp2py')
+sys.path.append('/home/antonio/Dropbox/projects/PyNpArr_2_CppCvMat/py2cpp')
+
+from cpp2py.CppImgReader import CppImgReader
+from py2cpp.CppImgWriter import CppImgWriter
+
 
 def show(img): 
     cv2.imshow(' ', img) 
@@ -11,14 +16,28 @@ def show(img):
 
 
 
-CppImgWriter.loadLib(libname = '/home/antonio/Dropbox/projects/chicken/pyinterface/py2cpp/libPyImageReader.so')
+CppImgWriter.loadLib(libname = '/home/antonio/Dropbox/projects/PyNpArr_2_CppCvMat/py2cpp/libPyImageReader.so')
+CppImgReader.loadLib(libname = '/home/antonio/Dropbox/projects/PyNpArr_2_CppCvMat/cpp2py/libPyImageWriter.so')
 
 writer = CppImgWriter(imgpath = '/home/antonio/tests/img2.jpg')
 
+lib = ct.CDLL('/home/antonio/Dropbox/projects/PyNpArr_2_CppCvMat/libdrawrect.so')
 
-CppImgReader.loadLib(libname = '/home/antonio/Dropbox/projects/chicken/pyinterface/py2cpp/libPyImageWriter.so')
+drawRect = lib.drawRect
 
-newobj = CppImgReader.lib.PyImgW_new
-newobj.restype = ct.c_void_p
-c_reader = CppImgReader(newobj(writer.getImg()))
+drawRect.restype = ct.c_void_p
+
+makereader = lambda writer: CppImgReader(drawRect(writer.sendImg()))
+
+reader = makereader(writer)
+
+show(reader.getImg())
+
+
+
+
+
+# newobj = CppImgReader.lib.PyImgW_new
+# newobj.restype = ct.c_void_p
+# c_reader = CppImgReader(newobj(writer.getImg()))
 
