@@ -3,7 +3,7 @@ from numpy.ctypeslib import ndpointer
 from functools import reduce
 import ctypes as ct
 
-from Mat2Ctype import mat2Ctype
+from .Mat2Ctype import mat2Ctype
 
 class CppImgReader:
     """class CppImgReader

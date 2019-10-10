@@ -1,7 +1,7 @@
 from functools import reduce
 
-from Np2Ctype import np2Ctype
-from Np2MatType import np2CVMatType
+from .Np2Ctype import np2Ctype
+from .Np2MatType import np2CVMatType
 
 
 def npArr2CArr(img):

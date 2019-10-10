@@ -1,7 +1,7 @@
 import ctypes as ct
 import cv2
 
-from NpArr2CArr import npArr2CArr
+from .NpArr2CArr import npArr2CArr
 
 class CppImgWriter:
     """class CppImgWriter
